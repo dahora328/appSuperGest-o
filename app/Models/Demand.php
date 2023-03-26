@@ -11,6 +11,6 @@ class Demand extends Model
 
     public function products()
     {
-        return $this->belongsToMany('App\Models\Product', 'products_demands','pedido_id','produto_id');
+        return $this->belongsToMany('App\Models\Product', 'products_demands','pedido_id','produto_id')->withPivot('created_at');
     }
 }

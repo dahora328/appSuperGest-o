@@ -21,4 +21,8 @@ class Product extends Model
     {
         return $this->belongsTo('App\Models\Provider', 'fornecedor_id');
     }
+    public function demands()
+    {
+        return $this->belongsToMany('App\Models\Demand','products_demands','produto_id', 'pedido_id');
+    }
 }

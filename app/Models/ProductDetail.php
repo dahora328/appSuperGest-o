@@ -16,4 +16,5 @@ class ProductDetail extends Model
     {
         return $this->belongsTo('App\Models\Product', 'produto_id');
     }
+
 }
