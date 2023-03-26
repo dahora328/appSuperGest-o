@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Demand;
+use App\Models\Product;
+use App\Models\ProductDemand;
 use Illuminate\Http\Request;
 
 class ProductDemandController extends Controller
@@ -21,9 +24,11 @@ class ProductDemandController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Demand $demand)
     {
-        //
+        $products = Product::all();
+        $demand->products; //eager loading
+        return view('app.product_demand.create', ['demand' => $demand, 'products' => $products]);
     }
 
     /**
@@ -32,9 +37,23 @@ class ProductDemandController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Demand $demand)
     {
-        //
+        $rules = [
+            'produto_id' => 'exists:products,id'
+        ];
+        $feedback = [
+            'produto_id.exists' => 'O produto informado não existe'
+        ];
+
+        $request->validate($rules, $feedback);
+
+        $productDemand = new ProductDemand();
+        $productDemand->pedido_id = $demand->id;
+        $productDemand->produto_id = $request->get('produto_id');
+        $productDemand->save();
+
+        return redirect()->route('product-demand.create', ['demand' => $demand->id]);
     }
 
     /**

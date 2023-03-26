@@ -50,7 +50,9 @@ Route::middleware('authentication')->prefix('/app')->group(function (){
     Route::resource('demand', DemandController::class);
 
     //pedidos produtos
-    Route::resource('product-demand', ProductDemandController::class);
+    //Route::resource('product-demand', ProductDemandController::class);
+    Route::get('/pedido-produto/create/{demand}', [ProductDemandController::class,'create'])->name('product-demand.create');
+    Route::post('/pedido-produto/store/{demand}', [ProductDemandController::class,'store'])->name('product-demand.store');
 });
 
 Route::fallback(function (){

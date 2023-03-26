@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Demand extends Model
 {
     use HasFactory;
+
+    public function products()
+    {
+        return $this->belongsToMany('App\Models\Product', 'products_demands','pedido_id','produto_id');
+    }
 }
