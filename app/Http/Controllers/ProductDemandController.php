@@ -40,18 +40,30 @@ class ProductDemandController extends Controller
     public function store(Request $request, Demand $demand)
     {
         $rules = [
-            'produto_id' => 'exists:products,id'
+            'produto_id' => 'exists:products,id',
+            'quantidade' => 'required'
         ];
         $feedback = [
-            'produto_id.exists' => 'O produto informado não existe'
+            'produto_id.exists' => 'O produto informado não existe',
+            'required' => 'O campo :attribute deve possuir um valor válido'
         ];
 
         $request->validate($rules, $feedback);
 
-        $productDemand = new ProductDemand();
+        /*$productDemand = new ProductDemand();
         $productDemand->pedido_id = $demand->id;
         $productDemand->produto_id = $request->get('produto_id');
-        $productDemand->save();
+        $productDemand->quantidade = $request->get('quantidade');
+        $productDemand->save();*/
+
+        /*$demand->products()->attach(
+            $request->get('produto_id'),
+            ['quantidade' => $request->get('quantidade')]
+        ); //aqui passa o objeto como parametro*/
+
+        $demand->products()->attach([
+            $request->get('produto_id') => [$request->get('quantidade')]
+        ]); //para inserir registros de vários formularios de uma só vez, passando todos como array associativo
 
         return redirect()->route('product-demand.create', ['demand' => $demand->id]);
     }
@@ -96,8 +108,19 @@ class ProductDemandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Demand $demand, Product $product)
     {
-        //
+
+        //convendcional
+        /*ProductDemand::where([
+            'pedido_id' => $demand,
+            'produto_id' => $product
+        ])->delete();*/
+        //detach (delete pelo relacionamento)
+
+        $demand->products()->detach($product->id);
+        //pedido_id já está no contexto, sendo usando quando objeto está sendo instaciado
+
+        return redirect()->route('product-demand.create',['demand' => $demand->id]);
     }
 }
