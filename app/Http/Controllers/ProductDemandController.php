@@ -61,9 +61,10 @@ class ProductDemandController extends Controller
             ['quantidade' => $request->get('quantidade')]
         ); //aqui passa o objeto como parametro*/
 
-        $demand->products()->attach([
-            $request->get('produto_id') => [$request->get('quantidade')]
-        ]); //para inserir registros de vários formularios de uma só vez, passando todos como array associativo
+        $demand->products()->attach(
+            $request->get('produto_id'),
+            ['quantidade' => $request->get('quantidade')]
+        ); //para inserir registros de vários formularios de uma só vez, passando todos como array associativo
 
         return redirect()->route('product-demand.create', ['demand' => $demand->id]);
     }
@@ -105,10 +106,11 @@ class ProductDemandController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int ProductDemand $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Demand $demand, Product $product)
+    //public function destroy(Demand $demand, Product $product)
+    public function destroy(ProductDemand $productDemand, $demand_id)
     {
 
         //convendcional
@@ -118,9 +120,12 @@ class ProductDemandController extends Controller
         ])->delete();*/
         //detach (delete pelo relacionamento)
 
-        $demand->products()->detach($product->id);
+        //$demand->products()->detach($product->id);
         //pedido_id já está no contexto, sendo usando quando objeto está sendo instaciado
 
-        return redirect()->route('product-demand.create',['demand' => $demand->id]);
+        $productDemand->delete();
+
+
+        return redirect()->route('product-demand.create',['demand' => $demand_id]);
     }
 }

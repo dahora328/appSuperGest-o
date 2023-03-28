@@ -53,7 +53,8 @@ Route::middleware('authentication')->prefix('/app')->group(function (){
     //Route::resource('product-demand', ProductDemandController::class);
     Route::get('/pedido-produto/create/{demand}', [ProductDemandController::class,'create'])->name('product-demand.create');
     Route::post('/pedido-produto/store/{demand}', [ProductDemandController::class,'store'])->name('product-demand.store');
-    Route::delete('/pedido-produto/destroy/{demand}/{product}', [ProductDemandController::class,'destroy'])->name('product-demand.destroy');
+    //Route::delete('/pedido-produto/destroy/{demand}/{product}', [ProductDemandController::class,'destroy'])->name('product-demand.destroy');
+    Route::delete('/pedido-produto/destroy/{productDemand}/{demand_id}', [ProductDemandController::class,'destroy'])->name('product-demand.destroy');
 });
 
 Route::fallback(function (){

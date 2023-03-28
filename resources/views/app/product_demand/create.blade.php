@@ -37,10 +37,10 @@
                             <td> {{ $product->id }}</td>
                             <td> {{ $product->nome }}</td>
                             <td> {{ $product->pivot->created_at->format('d/m/Y') }}</td>
-                            <form id="form_{{ $demand->id }}_{{ $product->id }}" method="post" action=" {{ route('product-demand.destroy', ['demand' => $demand->id, 'product' => $product->id]) }}">
+                            <form id="form_{{ $product->pivot->id }}" method="post" action=" {{ route('product-demand.destroy', ['productDemand'=> $product->pivot->id, 'demand_id' => $demand->id]) }}">
                                 @method('DELETE')
                                 @csrf
-                                <td><a href="#" onclick="document.getElementById('form_{{ $demand->id }}_{{ $product->id }}').submit()">Excluir</a> </td>
+                                <td><a href="#" onclick="document.getElementById('form_{{ $product->pivot->id }}').submit()">Excluir</a> </td>
                             </form>
                         </tr>
                         @endforeach
